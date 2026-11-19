@@ -1,0 +1,103 @@
+/* Vice Cover Studio — dark neon editor chrome. The cover itself is drawn on canvas. */
+@font-face {
+  font-family: "Anton";
+  src: url("fonts/Anton-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --bg: #12081f;
+  --panel: #1e0f33;
+  --panel-2: #2a1547;
+  --ink: #f5efff;
+  --muted: #b9a8d6;
+  --line: #4a2d73;
+  --pink: #ff2e88;
+  --cyan: #22d3ee;
+  --amber: #ffb020;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; min-height: 100%; }
+body {
+  background: radial-gradient(1200px 700px at 80% -10%, #3b0764 0%, transparent 60%),
+    radial-gradient(900px 600px at -10% 110%, #7c2d12 0%, transparent 55%),
+    var(--bg);
+  color: var(--ink);
+  font: 15px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+.app { display: flex; gap: 28px; align-items: flex-start; justify-content: center; padding: 24px; }
+.controls { width: 340px; flex: 0 0 340px; display: flex; flex-direction: column; gap: 16px; }
+.controls header h1 {
+  margin: 0 0 6px; font-family: "Anton", system-ui, sans-serif; font-weight: 400;
+  font-size: 34px; letter-spacing: 1px; line-height: 1;
+  background: linear-gradient(90deg, #ff2e88, #ffb020 55%, #22d3ee);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.controls header p { margin: 0; color: var(--muted); font-size: 13px; }
+
+.group { border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px 14px; background: var(--panel); margin: 0; }
+.group legend { font-weight: 700; font-size: 13px; padding: 0 6px; color: var(--ink); }
+.hint { margin: 8px 0 0; color: var(--muted); font-size: 12px; }
+
+.seg, .panels, .row { display: flex; gap: 8px; flex-wrap: wrap; }
+.seg button, .panels button {
+  flex: 1 1 auto; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px;
+  background: var(--panel-2); color: var(--ink); font: inherit; font-weight: 600; cursor: pointer;
+}
+.seg button.active, .panels button.active {
+  background: linear-gradient(90deg, #ff2e88, #7c3aed); border-color: transparent; color: #fff;
+}
+button:focus-visible, input:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+button { font: inherit; }
+.row button {
+  flex: 1 1 45%; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px;
+  background: var(--panel-2); color: var(--ink); cursor: pointer;
+}
+.row button:hover, .seg button:hover, .panels button:hover { border-color: var(--pink); }
+
+label { display: flex; flex-direction: column; gap: 6px; font-weight: 600; font-size: 13px; margin-top: 10px; }
+label:first-child { margin-top: 0; }
+input[type="text"] {
+  font: inherit; padding: 9px 10px; border: 1px solid var(--line); border-radius: 8px;
+  background: #150a26; color: var(--ink);
+}
+input[type="range"] { width: 100%; accent-color: var(--pink); }
+input[type="file"] { font: inherit; font-weight: 400; }
+.file input { margin-top: 2px; }
+
+.primary {
+  width: 100%; margin-top: 12px; padding: 12px; border: 0; border-radius: 10px;
+  background: linear-gradient(90deg, #ff2e88, #f97316 55%, #22d3ee); color: #fff;
+  font-weight: 800; font-size: 16px; cursor: pointer;
+}
+.primary:hover { filter: brightness(1.1); }
+#status { margin: 10px 0 0; color: var(--cyan); font-size: 13px; min-height: 1.2em; }
+
+.stage { flex: 1 1 auto; max-width: 760px; display: flex; flex-direction: column; align-items: center; gap: 10px; position: sticky; top: 24px; }
+.stage canvas {
+  width: min(100%, calc(100vh - 120px)); height: auto; max-height: calc(100vh - 120px);
+  aspect-ratio: auto; box-shadow: 0 18px 60px rgba(0, 0, 0, 0.6), 0 0 0 1px #ffffff22;
+  cursor: grab; background: #2b1838; touch-action: none;
+}
+.stage canvas:active { cursor: grabbing; }
+.stage-hint { margin: 0; color: var(--muted); font-size: 13px; }
+
+/* Cover-only view (?view=cover): the cover fills the viewport, no editor chrome. */
+body.cover-only { background: #0b0614; }
+body.cover-only .controls, body.cover-only .stage-hint { display: none; }
+body.cover-only .app { padding: 0; }
+body.cover-only .stage { max-width: none; position: static; }
+body.cover-only .stage canvas {
+  width: auto; height: 100vh; max-width: 100vw; max-height: 100vh;
+  box-shadow: none; cursor: default;
+}
+
+@media (max-width: 900px) {
+  .app { flex-direction: column; }
+  .controls { width: 100%; flex-basis: auto; }
+  .stage { position: static; max-width: 100%; }
+}
